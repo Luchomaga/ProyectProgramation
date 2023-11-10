@@ -1,0 +1,143 @@
+:root {
+    --green: hsl(162, 45%, 56%);
+    --lead: hsl(162, 2%, 56%);
+    --blue: hsl(220, 85%, 57%);
+    --violet: hsl(272, 92%, 32%);
+    --text-white: hsl(0, 0%, 100%);
+    --body-bg-color: hsl(200, 54%, 12%);
+    --glass-bg-color: hsla(0, 0%, 100%, 0.05);
+    --border-color: hsla(0, 0%, 100%, 0.25);  /* Corregido "boder" a "border" */
+    --blur: blur(10px);
+    --button-hover-color: hsla(0, 0%, 0%, 0.3);  /* Corregido "0. 0%" a "0, 0%" */
+}
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+body{
+    background-color: var(--body-bg-color);
+    color:#fff;
+    font-family: 'poppins',sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x:hidden;
+}
+body::after,
+body::before{
+    content:'';
+    position:fixed;
+    height:400px;
+    width:400px;
+    border-radius:50%;
+    z-index: -1;
+    filter: blur(150px);
+    opacity: 0.5;
+}
+body::before{
+    background-color: var(--green);
+    left:0;
+    bottom:0;
+    transform: translate(-50%);
+}
+body::after{
+    background-color: var(--violet);
+    right:0;
+    top:0;
+    transform:translate(50%);
+}
+.container{
+    border: solid 1px rgba(255, 255, 255, .2);
+}
+table{
+    color: #fff;
+    font-size: 14px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+thead{
+    background:linear-gradient(to right, var(--green),var(--lead));}
+
+th{
+    padding: 1px 15px;
+    font-weight: 700;
+    text-transform:uppercase;
+}
+td{
+    padding: 15px;
+    border-bottom: solid 1px rgba(255, 255, 255, .2);
+}
+tbody tr:hover{
+    background-color: var(--button-hover-color);
+}
+tbody tr{
+    cursor: pointer;
+}
+
+.form-content .btn {
+    height: 25px;
+    width: 5%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.form-content .btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: background-color 0.5s ease;
+    z-index: -1;
+}
+
+.form-content .btn:hover::before {
+    background-color: var(--button-hover-color);
+}
+/* Estilo para los botones Editar y Eliminar */
+.actions button {
+    height: 20px;
+    width: 70%;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 25px;
+    user-select: none;
+    background: linear-gradient(to right, var(--green), var(--lead));
+    border: none;
+    color: var(--tex-while);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin-right: 5px; /* Espacio entre los botones */
+}
+
+.actions button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: background-color 0.5s ease;
+    z-index: -1;
+}
+
+.actions button:hover::before {
+    background-color: var(--button-hover-color);
+}
+

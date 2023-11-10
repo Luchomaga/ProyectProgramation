@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla Caja</title>
+    <style>
+        :root {
+            --green: hsl(162, 45%, 56%);
+            --lead: hsl(162, 2%, 56%);
+            --blue: hsl(220, 85%, 57%);
+            --violet: hsl(272, 92%, 32%);
+            --text-white: hsl(0, 0%, 100%);
+            --body-bg-color: hsl(200, 54%, 12%);
+            --glass-bg-color: hsla(0, 0%, 100%, 0.05);
+            --border-color: hsla(0, 0%, 100%, 0.25);
+            --blur: blur(10px);
+            --button-hover-color: hsla(0, 0%, 0%, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--body-bg-color);
+            color: #fff;
+            font-family: 'poppins', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.5;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column; /* Centrar verticalmente */
+        }
+        body::after,
+        body::before {
+            content: '';
+            position: fixed;
+            height: 400px;
+            width: 400px;
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(150px);
+            opacity: 0.5;
+        }
+
+        body::before {
+            background-color: var(--green);
+            left: 0;
+            bottom: 0;
+            transform: translate(-50%);
+        }
+
+        body::after {
+            background-color: var(--violet);
+            right: 0;
+            top: 0;
+            transform: translate(50%);
+        }
+        .container {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        table {
+            color: #fff;
+            font-size: 14px;
+            table-layout: fixed;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        thead {
+            background: linear-gradient(to right, var(--green), var(--lead));
+        }
+
+        th {
+            padding: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        tbody tr:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        tbody tr {
+            cursor: pointer;
+        }
+
+        .edit-button, .delete-button {
+            background-color: var(--green);
+            color: var(--text-white);
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px; /* Agregado margen inferior */
+        }
+    </style>
+</head>
+<body>
+    <h1>Caja</h1>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Cambio</th>
+                    <th scope="col">Balance Total</th>
+                    <th scope="col">ID Factura</th>
+                    <th scope="col">ID Producto</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{ row[7] }}</td>
+                    <td>
+                        <button class="edit-button" data-id="{{ row[0] }}">Editar</button>
+                    </td>
+                    <td>
+                        <button class="delete-button" data-id="{{ row[0] }}">Eliminar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+                 // Obtén todos los botones de "Editar"
+                 const editButtons = document.querySelectorAll('.edit-button');
+
+                 // Agrega un manejador de eventos para cada botón de "Editar"
+                 editButtons.forEach(button => {
+                     button.addEventListener('click', function () {
+                         const id = this.getAttribute('data-id');
+                         // Lógica para editar el elemento con el ID correspondiente
+                         // Puedes abrir un formulario de edición o realizar la acción que necesites
+                         console.log('Editar elemento con ID:', id);
+                     });
+                 });
+         
+                 // Obtén todos los botones de "Eliminar"
+                 const deleteButtons = document.querySelectorAll('.delete-button');
+         
+                 // Agrega un manejador de eventos para cada botón de "Eliminar"
+                 deleteButtons.forEach(button => {
+                     button.addEventListener('click', function () {
+                         const id = this.getAttribute('data-id');
+                         // Lógica para eliminar el elemento con el ID correspondiente
+                         // Puedes mostrar un mensaje de confirmación antes de eliminar
+                         if (confirm('¿Seguro que deseas eliminar este elemento?')) {
+                             // Realiza la acción de eliminación
+                             console.log('Eliminar elemento con ID:', id);
+                         }
+                     });
+                 });
+    </script>
+</body>
+</html>

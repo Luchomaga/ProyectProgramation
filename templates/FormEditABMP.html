@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Edición de Empleado</title>
+    <style>
+        :root {
+            --green: hsl(162, 45%, 56%);
+            --lead: hsl(162, 2%, 56%);
+            --blue: hsl(220, 85%, 57%);
+            --violet: hsl(272, 92%, 32%);
+            --text-white: hsl(0, 0%, 100%);
+            --body-bg-color: hsl(200, 54%, 12%);
+            --glass-bg-color: hsla(0, 0%, 100%, 0.05);
+            --border-color: hsla(0, 0%, 100%, 0.25);
+            --blur: blur(10px);
+            --button-hover-color: hsla(0, 0%, 0%, 0.3);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: var(--body-bg-color);
+            color: #fff;
+            font-family: 'poppins', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        body::after,
+        body::before {
+            content: '';
+            position: fixed;
+            height: 400px;
+            width: 400px;
+            border-radius: 50%;
+            z-index: -1;
+            filter: var(--blur);
+            opacity: 0.5;
+        }
+        body::before {
+            background-color: var(--green);
+            left: 0;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+        body::after {
+            background-color: var(--violet);
+            right: 0;
+            top: 0;
+            transform: translateX(50%);
+        }
+        .container {
+            border: solid 1px rgba(255, 255, 255, .2);
+            text-align: center;
+        }
+        table {
+            color: #fff;
+            font-size: 14px;
+            table-layout: fixed;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th {
+            padding: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 15px;
+            border-bottom: solid 1px rgba(255, 255, 255, .2);
+        }
+        .form-content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .form-content input[type="text"],
+        .form-content input[type="date"],
+        .form-content input[type="email"],
+        .form-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--glass-bg-color);
+            color: var(--text-white);
+            text-align: center;
+        }
+        .form-content input[type="text"]::placeholder,
+        .form-content input[type="date"]::placeholder,
+        .form-content input[type="email"]::placeholder,
+        .form-content select::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--green), var(--lead));
+            color: #fff;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: var(--button-hover-color);
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulario de Edición de Empleado</h1>
+    <div class="container">
+        <form action="procesar_edicion.php" method="POST">
+            <div class="form-content">
+                <input type="text" name="id" value="ID" readonly>
+                <input type="text" name="nombre_apellido" placeholder="Nombre Apellido">
+                <input type="date" name="fecha_nacimiento" placeholder="Fecha de nacimiento">
+                <select name="genero" style="color: #000;">
+                    <option value="" disabled selected>Selecciona el género</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <input type="text" name="direccion" placeholder="Dirección">
+                <input type="text" name="telefono" placeholder="Teléfono">
+                <input type="email" name="correo" placeholder="Correo Electrónico">
+                <input type="date" name="fecha_contratacion" placeholder="Fecha de contratación">
+                <input type="text" name="usuario_personal" placeholder="Usuario Personal">
+                <input type="text" name="documento" placeholder="Documento">
+                <button class="btn" type="submit">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
