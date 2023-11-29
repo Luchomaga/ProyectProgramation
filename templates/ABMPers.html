@@ -141,21 +141,18 @@
                 {% for row in data %}
                 <tr>
                     <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[2] }}</td>
-                    <td>{{ row[3] }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td>{{ row[5] }}</td>
-                    <td>{{ row[6] }}</td>
-                    <td>{{ row[7] }}</td>
-                    <td>{{ row[8] }}</td>
-                    <td>{{ row[9] }}</td>
+                    <td class="nuevo_nombre">{{ row[1] }}</td>
+                    <td class="nuevo_fechanacimiento">{{ row[2] }}</td>
+                    <td class="nuevo_genero">{{ row[3] }}</td>
+                    <td class="nuevo_direccion">{{ row[4] }}</td>
+                    <td class="nuevo_telefono">{{ row[5] }}</td>
+                    <td class="nuevo_correo">{{ row[6] }}</td>
+                    <td class="nuevo_fechainicio">{{ row[7] }}</td>
+                    <td class="nuevo_Usuariopersonal">{{ row[8] }}</td>
+                    <td class="nuevo_Documento">{{ row[9] }}</td>
                     <td>
                         <td>
-                            <form method="POST" action="/actualizar_registro">
-                                <input type="hidden" name="registro_id" value="{{ row[0] }}">
-                                <button class="edit-button" type="submit">Editar</button>
-                            </form>
+                             <button class="edit-button"  data-id="{{ row[0] }}">Editar</button>
                         </td>
                         
                     </td>
@@ -171,39 +168,53 @@
         </table>
     </div>
     <script>
-            // Obtén todos los botones de "Editar"
+                // Obtén todos los botones de "Editar"
             const editButtons = document.querySelectorAll('.edit-button');
-        
-            // Agrega un manejador de eventos para cada botón de "Editar"
+
+         // Agrega un manejador de eventos para cada botón de "Editar"
             editButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const row = this.closest('tr'); // Obtén la fila actual
-                    const cells = row.querySelectorAll('td'); // Obtén todas las celdas de la fila
-        
-                    if (this.innerHTML === 'Editar') {
-                        // Cambia el botón a "Guardar"
-                        this.innerHTML = 'Guardar';
-        
-                        // Habilita la edición en línea
-                        cells.forEach(cell => {
-                            cell.contentEditable = true;
-                            cell.style.backgroundColor = '--green'; // Cambia el color de fondo para indicar edición
-                        }
-                        );
-                    } else {
-                        // Cambia el botón a "Editar"
-                        this.innerHTML = 'Editar';
-        
-                        // Deshabilita la edición en línea
-                        cells.forEach(cell => {
-                            cell.contentEditable = false;
-                            cell.style.backgroundColor = ''; // Restaura el color de fondo
-                        });
-        
-                        // Puedes agregar aquí la lógica para guardar los cambios en la base de datos si es necesario
-                    }
-                });
+            button.addEventListener('click', function () {
+                const row = this.closest('tr'); // Obtén la fila actual
+                const cells = row.querySelectorAll('td'); // Obtén todas las celdas de la fila
+
+                if (this.innerHTML === 'Editar') {
+                    // Cambia el botón a "Guardar"
+                    this.innerHTML = 'Guardar';
+                    this.setAttribute("onclick", "await guardarEdicion(this)")
+                    // Habilita la edición en línea
+                    cells.forEach(cell => {
+                        const cellId = cell.id;
+                        cell.contentEditable = true;
+                        cell.style.backgroundColor = '--green'; // Cambia el color de fondo para indicar edición
+                    });
+                } else {
+                    // Cambia el botón a "Editar"
+                    this.innerHTML = 'Editar';
+                    this.setAttribute("onclick", "")
+                    // Deshabilita la edición en línea
+                    cells.forEach(cell => {
+                        cell.contentEditable = false;
+                        cell.style.backgroundColor = ''; // Restaura el color de fondo
+                    });
+
+                    // Puedes agregar aquí la lógica para guardar los cambios en la base de datos si es necesario
+                    const id = this.getAttribute('data-id');
+                    // Recoger los datos editados y enviarlos al servidor para actualizar la base de datos
+                    const newData = {
+                        id: id,
+                        nombre: document.getElementById(`nombre_${id}`).innerText,
+                        fechanacimiento: document.getElementById(`fechanacimiento_${id}`).innerText,
+                        // Repite para las demás columnas
+                    };
+
+                    // Enviar los datos al servidor usando una solicitud AJAX o un formulario oculto
+                    // ...
+
+                    // También puedes redirigir a una página específica después de guardar los cambios
+                    // window.location.href = '/gestion';
+                }
             });
+        });
         
         // Obtén todos los botones de "Eliminar"
         const deleteButtons = document.querySelectorAll('.delete-button');
@@ -222,6 +233,45 @@
                 }
             });
         });
+
+         
+async function guardarEdicion(button) {
+    var fila = button.parentNode.parentNode;
+    var celdas = fila.getElementsByTagName("td");
+
+    console.log(button)
+    console.log(fila)
+    console.log(celdas)
+    console.log(celdas[0].textContent)
+    const id_registro = celdas[0].textContent
+
+
+  let formulario = new FormData();
+
+
+    for (const c of celdas) {
+    formulario.append(
+        c.classList[0],
+        c.textContent
+    );
+
+    }
+    try{
+
+        edit_resp = await fetch(`/editar/${id_registro}`, {
+            body: formulario,
+            method: "POST",
+        });
+    }catch(error){
+        console.log("hubo un problema con la peticion de edicion \n: ", error)
+    }
+
+  if (edit_resp.status === 200){
+    alert(`La informacion del registro ${id_registro}`)
+  }
+
+}
+
     </script>
     
 </body>

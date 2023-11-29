@@ -1,7 +1,7 @@
 import mysql.connector
 from werkzeug.wrappers import Request, Response
 import os
-from wsgi_app import render_template, request, Blueprint
+from wsgi_app import render_template, request, Blueprint, make_json
 from werkzeug.utils import redirect
 
 
@@ -76,23 +76,54 @@ def eliminar_registro():
         db.commit()
     return redirect('/gestion')
 
-@bp.route("/actualizar_registro")
-def actualizar_registro():
-    if request.method == 'POST':
-        registro_id = request.form.get('registro_id')
-        nuevo_nombre = request.form.get('nuevo_nombre')  
-        nueva_fechanacimiento = request.form.get('nueva_fechanacimiento')
-        nuevo_genero = request.form.get('nuevo_genero')
-        nueva_direccion = request.form.get('nueva_direccion')
-        nuevo_telefono = request.form.get('nuevo_telefono')
-        nuevo_correo = request.form.get('nuevo_correo')
-        nueva_fechainicio = request.form.get('nueva_fechainicio')
-        nuevo_Usuariopersonal = request.form.get('nuevo_Usuariopersonal')
-        nuevo_Documento = request.form.get('nuevo_Documento')
+@bp.route("/editar/<int:registro_id>")
+def editar_registro(registro_id):
+    cursor = db.cursor()
 
-        cursor = db.cursor()
-        sql = "UPDATE gestionpersonal SET nombre=%s, fechanacimiento=%s, genero=%s, direccion=%s, telefono=%s, correo=%s, fechainicio=%s, Usuariopersonal=%s, Documento=%s WHERE id=%s"
-        values = (nuevo_nombre, nueva_fechanacimiento, nuevo_genero, nueva_direccion, nuevo_telefono, nuevo_correo, nueva_fechainicio, nuevo_Usuariopersonal, nuevo_Documento, registro_id)
-        cursor.execute(sql, values)
-        db.commit()
+
+    # se asegura que el metodo
+    # de la peticion se POST
+    # caso contrario, devolver error
+    if request.method != "POST":
+        # crea respuesta JSON
+        bad_request = make_json(message="Mala peticion solo se recibe POST")
+        bad_request.status = 400
+        return bad_request
+
+    # si el usuario existe, devolvera [(1)]
+    # si el usuario no existe, devolvera None
+    cursor.execute("select 1 from gestionpersonal where id= %s", (registro_id,)) 
+    user_to_edit = cursor.fetchone()
+
+
+
+    # se asegura que el usuario exista
+    # caso contratio
+    # devuelve error
+    if user_to_edit is None:
+        not_found = make_json(message="El usuario solicitado no fue encontrado")
+        not_found.status = 404
+        return not_found
+
+    return make_json(message="editado con exito")
+
+    # Recoger los datos editados desde el formulario HTML
+    nuevo_nombre = request.form.get('nuevo_nombre')
+    nuevo_fechanacimiento = request.form.get('nuevo_fechanacimiento')
+    nuevo_genero = request.form.get('nuevo_genero')
+    nuevo_direccion = request.form.get('nuevo_direccion')
+    nuevo_telefono = request.form.get('nuevo_telefono')
+    nuevo_correo = request.form.get('nuevo_correo')
+    nuevo_fechainicio = request.form.get('nuevo_fechainicio')
+    nuevo_Usuariopersonal = request.form.get('nuevo_Usuariopersonal')
+    nuevo_Documento = request.form.get('nuevo_Documento')
+    # Asegúrate de adaptar esto según la estructura de tu tabla
+
+    # Actualizar la base de datos con los nuevos valores
+    cursor.execute("""UPDATE gestionpersonal SET nombre = %s, fechanacimiento = %s, genero = %s, direccion = %s, telefono = %s, correo = %s, fechainicio = %s, 
+    Usuariopersonal = %s, Documento = %s WHERE id = %s""",
+    (nuevo_nombre, nuevo_fechanacimiento, nuevo_genero, nuevo_direccion, nuevo_telefono, nuevo_correo,
+        nuevo_fechainicio, nuevo_Usuariopersonal, nuevo_Documento, registro_id))
+    db.commit()
+    cursor.close()
     return redirect('/gestion')
