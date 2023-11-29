@@ -167,6 +167,9 @@
             </tbody>
         </table>
     </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="edit-button" onclick="agregarUsuario()">Agregar Usuario</button>
+    </div>
     <script>
                 // Obtén todos los botones de "Editar"
             const editButtons = document.querySelectorAll('.edit-button');
@@ -235,44 +238,46 @@
         });
 
          
-async function guardarEdicion(button) {
-    var fila = button.parentNode.parentNode;
-    var celdas = fila.getElementsByTagName("td");
+        async function guardarEdicion(button) {
+            var fila = button.parentNode.parentNode;
+            var celdas = fila.getElementsByTagName("td");
 
-    console.log(button)
-    console.log(fila)
-    console.log(celdas)
-    console.log(celdas[0].textContent)
-    const id_registro = celdas[0].textContent
-
-
-  let formulario = new FormData();
+            console.log(button)
+            console.log(fila)
+            console.log(celdas)
+            console.log(celdas[0].textContent)
+            const id_registro = celdas[0].textContent
 
 
-    for (const c of celdas) {
-    formulario.append(
-        c.classList[0],
-        c.textContent
-    );
+        let formulario = new FormData();
 
-    }
-    try{
 
-        edit_resp = await fetch(`/editar/${id_registro}`, {
-            body: formulario,
-            method: "POST",
-        });
-    }catch(error){
-        console.log("hubo un problema con la peticion de edicion \n: ", error)
-    }
+            for (const c of celdas) {
+            formulario.append(
+                c.classList[0],
+                c.textContent
+            );
 
-  if (edit_resp.status === 200){
-    alert(`La informacion del registro ${id_registro}`)
-  }
+            }
+            try{
 
-}
+                edit_resp = await fetch(`/editar/${id_registro}`, {
+                    body: formulario,
+                    method: "POST",
+                });
+            }catch(error){
+                console.log("hubo un problema con la peticion de edicion \n: ", error)
+            }
 
+        if (edit_resp.status === 200){
+            alert(`La informacion del registro ${id_registro}`)
+        }
+        }
+        function agregarUsuario() {
+            // Aquí puedes agregar la lógica para agregar un nuevo usuario
+            window.location.href='/form';
+            alert('Función de agregar usuario ejecutada');
+        }
     </script>
-    
 </body>
 </html>

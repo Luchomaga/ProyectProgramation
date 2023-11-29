@@ -48,7 +48,12 @@ def gestionpersonal_app():
         response = Response( **render_template('ABMPers.html', data=data))
     
     return response
-
+@bp.route("/form")
+def form_app():
+    if request.method == 'GET':
+        data = get_gestionpersonal()
+        response = Response( **render_template('FormEditABMP.html', data=data))
+    return response
 @bp.route("/Caja")
 def caja_app():
    
@@ -65,6 +70,7 @@ def registroclientes_app():
         response = Response(**render_template('registrocliente.html', data=data))
 
     return response
+
 
 @bp.route("/eliminar_registro")
 def eliminar_registro():
